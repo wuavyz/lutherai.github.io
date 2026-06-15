@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CodeForge — Learn to Code, Free</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #06070E;
+      --surf:    #0E1119;
+      --surf2:   #141824;
+      --accent:  #7C3AED;
+      --adim:    rgba(124,58,237,.22);
+      --cyan:    #22D3EE;
+      --cdim:    rgba(34,211,238,.11);
+      --text:    #EEF0FC;
+      --muted:   #8694C4;
+      --border:  #1A2040;
+      --brite:   #2A3560;
+      --green:   #10B981;
+      --r:       12px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ───────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .95rem 3rem;
+      background: rgba(6,7,14,.84);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      font-size: 1.35rem; font-weight: 700; text-decoration: none;
+      background: linear-gradient(120deg,#A78BFA,#22D3EE);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; letter-spacing: -.02em;
+    }
+    .nav-links { display: flex; gap: 2.2rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none;
+      font-size: .88rem; font-weight: 500; transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: .4rem;
+      padding: .6rem 1.35rem; border-radius: 8px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600; font-size: .88rem;
+      cursor: pointer; text-decoration: none; border: none; transition: all .2s;
+    }
+    .btn-primary {
+      background: var(--accent); color: #fff;
+      box-shadow: 0 0 28px rgba(124,58,237,.35);
+    }
+    .btn-primary:hover {
+      background: #6D28D9;
+      box-shadow: 0 0 44px rgba(124,58,237,.52);
+      transform: translateY(-1px);
+    }
+    .btn-outline {
+      background: transparent; color: var(--text);
+      border: 1px solid var(--brite);
+    }
+    .btn-outline:hover {
+      border-color: var(--cyan); color: var(--cyan);
+      background: var(--cdim);
+    }
+    .btn-lg { font-size: 1rem; padding: .85rem 2.2rem; }
+
+    /* ── HERO ──────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      padding: 9rem 3rem 5rem;
+      display: flex; align-items: center;
+      position: relative; overflow: hidden;
+    }
+    .glow-a {
+      position: absolute; top: 12%; left: -8%;
+      width: 720px; height: 720px;
+      background: radial-gradient(circle,rgba(124,58,237,.13),transparent 65%);
+      pointer-events: none;
+    }
+    .glow-b {
+      position: absolute; bottom: 5%; right: -5%;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle,rgba(34,211,238,.07),transparent 65%);
+      pointer-events: none;
+    }
+    .hero-in {
+      max-width: 1220px; margin: 0 auto; width: 100%;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4.5rem; align-items: center; position: relative; z-index: 1;
+    }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .3rem .85rem; border-radius: 100px;
+      background: var(--cdim); border: 1px solid rgba(34,211,238,.22);
+      font-size: .72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .1em;
+      color: var(--cyan); margin-bottom: 1.5rem;
+    }
+    .blink { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); animation: blink 1.8s ease infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+
+    h1 {
+      font-size: clamp(2.8rem,4.5vw,4rem);
+      font-weight: 700; letter-spacing: -.03em;
+      line-height: 1.09; margin-bottom: 1.3rem;
+    }
+    .grad { background: linear-gradient(135deg,#A78BFA 10%,#22D3EE 90%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero-sub { font-size: 1.1rem; color: var(--muted); max-width: 420px; line-height: 1.75; margin-bottom: 2.5rem; }
+    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    /* Hero code widget */
+    .hero-widget {
+      background: var(--surf); border: 1px solid var(--border);
+      border-radius: var(--r); overflow: hidden;
+      box-shadow: 0 0 0 1px rgba(124,58,237,.16), 0 32px 80px rgba(0,0,0,.55), 0 0 60px rgba(124,58,237,.1);
+    }
+    .w-bar {
+      display: flex; align-items: center; gap: .5rem;
+      padding: .7rem 1rem; background: var(--surf2);
+      border-bottom: 1px solid var(--border);
+    }
+    .dot-m { width: 12px; height: 12px; border-radius: 50%; }
+    .dm-r { background: #FF5F57; } .dm-y { background: #FEBC2E; } .dm-g { background: #28C840; }
+    .w-fname { margin-left: .4rem; font-family: 'JetBrains Mono',monospace; font-size: .75rem; color: var(--muted); }
+    .w-body { padding: 1.3rem 1.5rem; font-family: 'JetBrains Mono',monospace; font-size: .83rem; line-height: 1.9; min-height: 230px; }
+
+    /* syntax colours */
+    .ck { color: #C678DD; } .cs { color: #98C379; } .cf { color: #61AFEF; }
+    .cc { color: #3E4D6E; } .cn { color: #D19A66; }
+    .cursor { display: inline-block; width: 2px; height: 1em; background: var(--cyan); vertical-align: text-bottom; animation: blink 1s step-end infinite; }
+
+    /* ── SECTION SHELL ─────────────────────────────── */
+    .sec { padding: 6.5rem 3rem; }
+    .sec-in { max-width: 1220px; margin: 0 auto; }
+    .slbl { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: var(--accent); margin-bottom: .8rem; }
+    .slbl-c { color: var(--cyan); }
+    .stitle { font-size: clamp(1.8rem,3.5vw,2.7rem); font-weight: 700; letter-spacing: -.025em; line-height: 1.15; margin-bottom: .9rem; }
+    .ssub { font-size: 1.02rem; color: var(--muted); line-height: 1.75; max-width: 500px; margin-bottom: 3.5rem; }
+    .divider { border: none; border-top: 1px solid var(--border); }
+
+    /* ── FEATURES ──────────────────────────────────── */
+    .feats { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; }
+    .fc {
+      padding: 2rem 1.75rem; background: var(--surf);
+      border: 1px solid var(--border); border-radius: var(--r);
+      transition: border-color .25s, transform .25s;
+    }
+    .fc:hover { border-color: var(--brite); transform: translateY(-5px); }
+    .fc-icon { font-size: 1.9rem; margin-bottom: 1.2rem; display: block; }
+    .fc h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: .55rem; }
+    .fc p  { font-size: .88rem; color: var(--muted); line-height: 1.7; }
+
+    /* ── PLAYGROUND ────────────────────────────────── */
+    #playground { background: var(--surf); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .pg-top {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-bottom: 1.4rem; gap: 1rem; flex-wrap: wrap;
+    }
+    .pg-ctrl { display: flex; align-items: center; gap: .75rem; }
+    .tab-row {
+      display: inline-flex; background: var(--bg);
+      border: 1px solid var(--border); border-radius: 8px;
+      padding: 3px; gap: 3px; margin-bottom: 1rem;
+    }
+    .pg-tab {
+      padding: .38rem .95rem; border-radius: 6px;
+      font-size: .82rem; font-weight: 600;
+      font-family: 'JetBrains Mono',monospace;
+      cursor: pointer; border: none;
+      background: transparent; color: var(--muted); transition: all .15s;
+    }
+    .pg-tab.active { background: var(--accent); color: #fff; }
+    .pg-tab:not(.active):hover { color: var(--text); background: var(--surf2); }
+
+    .run-btn {
+      display: flex; align-items: center; gap: .4rem;
+      padding: .45rem 1.1rem; background: var(--green);
+      color: #fff; border: none; border-radius: 7px;
+      font-family: 'Space Grotesk',sans-serif;
+      font-weight: 700; font-size: .82rem; cursor: pointer; transition: all .2s;
+    }
+    .run-btn:hover { background: #059669; box-shadow: 0 0 20px rgba(16,185,129,.35); }
+
+    .auto-row { display: flex; align-items: center; gap: .45rem; font-size: .78rem; color: var(--muted); }
+    .tgl { position: relative; width: 34px; height: 18px; flex-shrink: 0; }
+    .tgl input { opacity: 0; width: 0; height: 0; }
+    .tgl-t {
+      position: absolute; inset: 0; background: var(--brite);
+      border-radius: 9px; cursor: pointer; transition: .2s;
+    }
+    .tgl-t::before {
+      content: ''; position: absolute;
+      width: 12px; height: 12px; background: #fff;
+      border-radius: 50%; left: 3px; top: 3px; transition: .2s;
+    }
+    .tgl input:checked + .tgl-t { background: var(--accent); }
+    .tgl input:checked + .tgl-t::before { transform: translateX(16px); }
+
+    .pg-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; height: 500px; }
+    .pane {
+      border: 1px solid var(--border); border-radius: var(--r);
+      overflow: hidden; display: flex; flex-direction: column;
+    }
+    .pane-hd {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .55rem .9rem; background: var(--surf2);
+      border-bottom: 1px solid var(--border); flex-shrink: 0;
+    }
+    .pane-t { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+    .pane-hint { font-size: .7rem; color: #3A4D70; font-family: 'JetBrains Mono',monospace; }
+    .pstat { font-size: .7rem; color: var(--green); display: flex; align-items: center; gap: .3rem; }
+
+    .code-ta {
+      flex: 1; background: #090B12; color: #CDD6F4;
+      font-family: 'JetBrains Mono',monospace;
+      font-size: .82rem; line-height: 1.75;
+      padding: 1rem 1.2rem; border: none; outline: none;
+      resize: none; width: 100%; tab-size: 2;
+      caret-color: var(--cyan);
+    }
+    .code-ta:focus { box-shadow: inset 0 0 0 1px rgba(34,211,238,.13); }
+    .preview-fr { flex: 1; border: none; background: #fff; width: 100%; }
+
+    /* ── COURSES ───────────────────────────────────── */
+    .courses { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; }
+    .cc {
+      background: var(--surf); border: 1px solid var(--border);
+      border-radius: var(--r); overflow: hidden;
+      cursor: pointer; transition: all .3s;
+    }
+    .cc:hover { border-color: var(--accent); box-shadow: 0 8px 32px rgba(124,58,237,.16); transform: translateY(-4px); }
+    .ct { height: 130px; display: flex; align-items: center; justify-content: center; font-size: 2.75rem; font-weight: 900; letter-spacing: -.04em; }
+    .th-h  { background: linear-gradient(135deg,#E44D26,#F16529); color: #fff; }
+    .th-c  { background: linear-gradient(135deg,#2965F1,#1B4CC9); color: #fff; }
+    .th-j  { background: linear-gradient(135deg,#F0DB4F,#E4C600); color: #222; }
+    .th-p  { background: linear-gradient(135deg,#3776AB,#5A9FD4); color: #fff; }
+    .th-r  { background: linear-gradient(135deg,#20232A,#2D3039); color: #61DAFB; }
+    .th-n  { background: linear-gradient(135deg,#3C873A,#5DB45A); color: #fff; }
+    .cb { padding: 1.2rem 1.4rem; }
+    .clvl {
+      display: inline-block; padding: .18rem .6rem; border-radius: 4px;
+      background: rgba(124,58,237,.12); border: 1px solid rgba(124,58,237,.28);
+      font-size: .67rem; font-weight: 700; letter-spacing: .07em;
+      text-transform: uppercase; color: #A78BFA; margin-bottom: .6rem;
+    }
+    .cc h3 { font-size: .98rem; font-weight: 700; margin-bottom: .35rem; }
+    .cc p  { font-size: .83rem; color: var(--muted); line-height: 1.65; margin-bottom: .9rem; }
+    .cmeta { display: flex; gap: 1rem; font-size: .75rem; color: #5A6B8C; }
+
+    /* ── CTA BAND ──────────────────────────────────── */
+    .cta-band { padding: 5.5rem 3rem; text-align: center; position: relative; overflow: hidden; }
+    .cta-glo {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      width: 800px; height: 400px;
+      background: radial-gradient(ellipse,rgba(124,58,237,.2),transparent 70%);
+      pointer-events: none;
+    }
+    .cta-band h2 {
+      position: relative; font-size: clamp(1.8rem,3.5vw,2.7rem);
+      font-weight: 700; letter-spacing: -.025em; margin-bottom: .9rem;
+    }
+    .cta-band p { position: relative; color: var(--muted); margin-bottom: 2.5rem; font-size: 1.05rem; }
+
+    /* ── FOOTER ────────────────────────────────────── */
+    footer { border-top: 1px solid var(--border); padding: 2rem 3rem; }
+    .foot-in {
+      max-width: 1220px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .foot-links { display: flex; gap: 1.5rem; list-style: none; }
+    .foot-links a { color: var(--muted); text-decoration: none; font-size: .83rem; transition: color .2s; }
+    .foot-links a:hover { color: var(--text); }
+    .foot-copy { font-size: .78rem; color: #3A4D70; }
+
+    /* ── SCROLL FADE ───────────────────────────────── */
+    .fi { opacity: 0; transform: translateY(20px); transition: opacity .55s, transform .55s; }
+    .fi.show { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ────────────────────────────────── */
+    @media(max-width:940px){
+      nav { padding: .9rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero { padding: 8rem 1.5rem 4rem; }
+      .hero-in { grid-template-columns: 1fr; gap: 2.5rem; }
+      .hero-widget { display: none; }
+      .sec { padding: 4.5rem 1.5rem; }
+      .feats { grid-template-columns: 1fr; }
+      .pg-layout { grid-template-columns: 1fr; height: auto; }
+      .code-ta { height: 260px; }
+      .preview-fr { height: 260px; flex: none; }
+      .courses { grid-template-columns: 1fr 1fr; }
+      .cta-band { padding: 3.5rem 1.5rem; }
+      footer { padding: 1.5rem; }
+    }
+    @media(max-width:540px){
+      .courses { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#">CodeForge</a>
+  <ul class="nav-links">
+    <li><a href="#features">Why CodeForge</a></li>
+    <li><a href="#playground">Playground</a></li>
+    <li><a href="#courses">Courses</a></li>
+  </ul>
+  <a href="#playground" class="btn btn-primary">Try Playground →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="glow-a"></div>
+  <div class="glow-b"></div>
+  <div class="hero-in">
+    <div>
+      <span class="eyebrow"><span class="blink"></span>100% Free · No Sign-up Needed</span>
+      <h1>The place where<br><span class="grad">code comes alive.</span></h1>
+      <p class="hero-sub">Learn programming through instant, hands-on coding. Write it, see it, ship it — free forever.</p>
+      <div class="hero-ctas">
+        <a href="#courses" class="btn btn-primary">Start Learning Free</a>
+        <a href="#playground" class="btn btn-outline">Open Playground</a>
+      </div>
+    </div>
+    <div class="hero-widget">
+      <div class="w-bar">
+        <span class="dot-m dm-r"></span>
+        <span class="dot-m dm-y"></span>
+        <span class="dot-m dm-g"></span>
+        <span class="w-fname">script.js</span>
+      </div>
+      <div class="w-body" id="heroCode"></div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- FEATURES -->
+<section class="sec" id="features">
+  <div class="sec-in">
+    <p class="slbl fi">Why CodeForge</p>
+    <h2 class="stitle fi">Built for builders.<br>Free for everyone.</h2>
+    <p class="ssub fi">No subscriptions. No paywalls. Just great learning tools for anyone ready to write their first line of code.</p>
+    <div class="feats">
+      <div class="fc fi">
+        <span class="fc-icon">🎓</span>
+        <h3>Expert-Crafted Courses</h3>
+        <p>Structured tracks from HTML basics to full-stack development, written by engineers who build real products.</p>
+      </div>
+      <div class="fc fi">
+        <span class="fc-icon">⚡</span>
+        <h3>Live Code Playground</h3>
+        <p>Write HTML, CSS, and JavaScript and watch your creation appear instantly. No installs, no accounts, no friction.</p>
+      </div>
+      <div class="fc fi">
+        <span class="fc-icon">🛠️</span>
+        <h3>Real Project Work</h3>
+        <p>Every course ends with a project you actually built — a portfolio you can show, not just a certificate you earned.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- PLAYGROUND -->
+<section class="sec" id="playground">
+  <div class="sec-in">
+    <div class="pg-top">
+      <div>
+        <p class="slbl slbl-c">Free Tool</p>
+        <h2 class="stitle fi" style="margin-bottom:0">Live Code Playground</h2>
+      </div>
+      <div class="pg-ctrl">
+        <label class="auto-row">
+          <label class="tgl">
+            <input type="checkbox" id="autoRun" checked>
+            <span class="tgl-t"></span>
+          </label>
+          Auto-run
+        </label>
+        <button class="run-btn" id="runBtn">▶&nbsp;Run</button>
+      </div>
+    </div>
+
+    <div class="tab-row">
+      <button class="pg-tab active" data-tab="html">HTML</button>
+      <button class="pg-tab" data-tab="css">CSS</button>
+      <button class="pg-tab" data-tab="js">JS</button>
+    </div>
+
+    <div class="pg-layout">
+      <div class="pane">
+        <div class="pane-hd">
+          <span class="pane-t" id="edLabel">HTML</span>
+          <span class="pane-hint">Tab → 2 spaces</span>
+        </div>
+        <textarea class="code-ta" id="htmlTA" spellcheck="false"></textarea>
+        <textarea class="code-ta" id="cssTA"  spellcheck="false" style="display:none"></textarea>
+        <textarea class="code-ta" id="jsTA"   spellcheck="false" style="display:none"></textarea>
+      </div>
+      <div class="pane">
+        <div class="pane-hd">
+          <span class="pane-t">Preview</span>
+          <span class="pstat" id="pStat">● Live</span>
+        </div>
+        <iframe class="preview-fr" id="previewFr" sandbox="allow-scripts allow-forms"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- COURSES -->
+<section class="sec" id="courses">
+  <div class="sec-in">
+    <p class="slbl fi">Free Courses</p>
+    <h2 class="stitle fi">Pick your path.<br>Learn at your pace.</h2>
+    <p class="ssub fi">Every course is entirely free and self-paced. Start any time. No deadlines, no gatekeeping.</p>
+    <div class="courses">
+      <div class="cc fi"><div class="ct th-h">&lt;/&gt;</div><div class="cb"><span class="clvl">Beginner</span><h3>HTML Fundamentals</h3><p>Build the skeleton of any webpage. Tags, structure, forms, and semantics.</p><div class="cmeta"><span>📚 12 lessons</span><span>⏱ 4 hrs</span></div></div></div>
+      <div class="cc fi"><div class="ct th-c">{}</div><div class="cb"><span class="clvl">Beginner</span><h3>CSS & Design Systems</h3><p>Style with precision. Flexbox, Grid, animations, and responsive layout.</p><div class="cmeta"><span>📚 18 lessons</span><span>⏱ 6 hrs</span></div></div></div>
+      <div class="cc fi"><div class="ct th-j">JS</div><div class="cb"><span class="clvl">Intermediate</span><h3>JavaScript Essentials</h3><p>Make pages interactive. Functions, DOM manipulation, events, and async.</p><div class="cmeta"><span>📚 24 lessons</span><span>⏱ 10 hrs</span></div></div></div>
+      <div class="cc fi"><div class="ct th-p">🐍</div><div class="cb"><span class="clvl">Beginner</span><h3>Python for Beginners</h3><p>The world's most readable language. Great for data, scripts, and back-end.</p><div class="cmeta"><span>📚 20 lessons</span><span>⏱ 8 hrs</span></div></div></div>
+      <div class="cc fi"><div class="ct th-r">⚛</div><div class="cb"><span class="clvl">Advanced</span><h3>React & Modern JS</h3><p>Component-driven UIs with the framework behind Meta, Netflix, and Airbnb.</p><div class="cmeta"><span>📚 30 lessons</span><span>⏱ 15 hrs</span></div></div></div>
+      <div class="cc fi"><div class="ct th-n">⬡</div><div class="cb"><span class="clvl">Intermediate</span><h3>Node.js & APIs</h3><p>Server-side JavaScript. Build REST APIs, connect to databases, and deploy.</p><div class="cmeta"><span>📚 22 lessons</span><span>⏱ 12 hrs</span></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<section class="cta-band">
+  <div class="cta-glo"></div>
+  <h2>Ready to write your first line?</h2>
+  <p>Join thousands of learners building real things, for free.</p>
+  <a href="#playground" class="btn btn-primary btn-lg">Open the Playground →</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-in">
+    <a class="logo" href="#">CodeForge</a>
+    <ul class="foot-links">
+      <li><a href="#">Courses</a></li>
+      <li><a href="#playground">Playground</a></li>
+      <li><a href="#">Community</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+    <span class="foot-copy">© 2026 CodeForge — Free forever.</span>
+  </div>
+</footer>
+
+<script>
+// ── PLAYGROUND DEFAULTS ──────────────────────────────
+const DEF = {
+  html: `<div class="card">
+  <h1>Hello, Coder! 👋</h1>
+  <p>Edit the code on the left.</p>
+  <p>The preview updates live!</p>
+  <div id="num">0</div>
+  <button onclick="handleClick()">Click me!</button>
+</div>`,
+  css: `* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: sans-serif;
+  background: linear-gradient(135deg, #f0f4ff, #e8edff);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  background: white;
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+  text-align: center;
+  max-width: 340px;
+  width: 100%;
+}
+
+h1 { color: #7C3AED; margin-bottom: 0.75rem; }
+p  { color: #666; line-height: 1.6; margin-bottom: 0.5rem; }
+
+#num {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #7C3AED;
+  margin: 1rem 0;
+}
+
+button {
+  padding: 0.75rem 2rem;
+  background: #7C3AED;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 0.5rem;
+}
+
+button:hover {
+  background: #6D28D9;
+  transform: scale(1.05);
+}`,
+  js: `let clicks = 0;
+
+function handleClick() {
+  clicks++;
+  document.getElementById('num').textContent = clicks;
+}`
+};
+
+// ── REFS ─────────────────────────────────────────────
+const htmlTA  = document.getElementById('htmlTA');
+const cssTA   = document.getElementById('cssTA');
+const jsTA    = document.getElementById('jsTA');
+const preview = document.getElementById('previewFr');
+const runBtn  = document.getElementById('runBtn');
+const autoRun = document.getElementById('autoRun');
+const edLabel = document.getElementById('edLabel');
+const pStat   = document.getElementById('pStat');
+const tabs    = document.querySelectorAll('.pg-tab');
+const editors = { html: htmlTA, css: cssTA, js: jsTA };
+const labels  = { html: 'HTML', css: 'CSS', js: 'JavaScript' };
+
+htmlTA.value = DEF.html;
+cssTA.value  = DEF.css;
+jsTA.value   = DEF.js;
+
+// ── TABS ─────────────────────────────────────────────
+tabs.forEach(t => t.addEventListener('click', () => {
+  tabs.forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+  Object.values(editors).forEach(e => (e.style.display = 'none'));
+  editors[t.dataset.tab].style.display = 'block';
+  edLabel.textContent = labels[t.dataset.tab];
+}));
+
+// ── RENDER ────────────────────────────────────────────
+function runCode() {
+  const doc = [
+    '<!DOCTYPE html><html><head><meta charset="UTF-8">',
+    '<style>' + cssTA.value + '<\/style>',
+    '</head><body>',
+    htmlTA.value,
+    '<script>' + jsTA.value + '<\/scr' + 'ipt>',
+    '</body></html>'
+  ].join('');
+  preview.srcdoc = doc;
+  pStat.textContent = '● Updated';
+  setTimeout(() => (pStat.textContent = '● Live'), 900);
+}
+
+runBtn.addEventListener('click', runCode);
+
+let timer;
+Object.values(editors).forEach(ed => {
+  ed.addEventListener('input', () => {
+    if (autoRun.checked) { clearTimeout(timer); timer = setTimeout(runCode, 650); }
+  });
+  ed.addEventListener('keydown', e => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const s = ed.selectionStart, end = ed.selectionEnd;
+      ed.value = ed.value.slice(0, s) + '  ' + ed.value.slice(end);
+      ed.selectionStart = ed.selectionEnd = s + 2;
+    }
+  });
+});
+
+runCode();
+
+// ── HERO TYPEWRITER ───────────────────────────────────
+const lines = [
+  `<span class="cc">// Welcome to CodeForge 🚀</span>`,
+  ``,
+  `<span class="ck">const</span> <span class="cf">learn</span> = () => {`,
+  `&nbsp;&nbsp;<span class="ck">return</span> <span class="cs">"from zero to builder"</span>;`,
+  `};`,
+  ``,
+  `<span class="cf">console</span>.log(<span class="cf">learn</span>());`,
+  `<span class="cc">// → "from zero to builder"</span>`,
+  ``,
+  `<span class="cc">// 3,742 coders online now 🟢</span>`,
+];
+
+const heroBox = document.getElementById('heroCode');
+let li = 0, full = '';
+
+function typeLine() {
+  if (li >= lines.length) {
+    heroBox.innerHTML = full + '<span class="cursor"></span>';
+    return;
+  }
+  full += lines[li] + '<br>';
+  li++;
+  heroBox.innerHTML = full + '<span class="cursor"></span>';
+  setTimeout(typeLine, lines[li - 1] === '' ? 90 : 150);
+}
+setTimeout(typeLine, 700);
+
+// ── SCROLL FADE ───────────────────────────────────────
+const io = new IntersectionObserver(
+  es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); }),
+  { threshold: 0.1 }
+);
+document.querySelectorAll('.fi').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
